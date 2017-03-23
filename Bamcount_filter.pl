@@ -2,7 +2,7 @@
 $num_args = $#ARGV + 1;
 
 if ($num_args != 1) {
-   print "\n Verwendung: Bamcount_filter.pl critical_p-value\n";
+   print "\n Verwendung: Bamcount_filter.pl p-Wert\n";
     exit;
 }
 mkdir bamcount_filtered;
@@ -14,17 +14,10 @@ print "\n$file1\n$bamfile\n\n";
 
 
 
-#Abfrage, ob DBSCAN bereits existiert, bzw Isolat schon berechnet wurde
-#  while ($dir=<${out}/${bamfile}*.table>){
-#  print "$dir\n";
-#  $h{$1}=1;
-#  }
-#  unless(defined $h{$1}){ #wenn das nicht der Fall ist geht es los:
+open(Fout,">bamcount_filtered/${bamfile}_${ARGV[0]}-filtered.table") or die "\n\nÖffnen von $ARGV[0] nicht möglich\n\n\n";
+open(Fin,"<$file1") or die "\n\nÖffnen von $file1 nicht möglich\n\n\n";
 
-open(Fout,">bamcount_filtered/${bamfile}_${ARGV[0]}-filtered.table") or die "\n\n\"Offnen von $ARGV[0] nicht m\"oglich\n\n\n";
-open(Fin,"<$file1") or die "\n\n\"Offnen von $file1 nicht m\"oglich\n\n\n";
-
-print Fout "POS\tREF\tALT\tDP\t#ALT\tFreq(ALT)\tQual(ALT)\tp-value\tantibiotic\n";
+print Fout "POS\tREF\tALT\tDP\t#ALT\tFreq(ALT)\tQual(ALT)\tp-value\tantibiotic\n";  #Spalten für die Ausgabedatei festlegen
 
 $line=<Fin>;
     while($line=<Fin>){
@@ -40,5 +33,5 @@ $line=<Fin>;
             print Fout "$array[0]\t$array[1]\t$array[2]\t$array[3]\t$array[13]\t$array[16]\t$array[17]\t$array[18]\t$array[19]";}
             else {print "$line\n";}
         }
-    }   
+    }
 }

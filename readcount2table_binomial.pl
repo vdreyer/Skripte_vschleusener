@@ -8,12 +8,12 @@ if ($num_args != 3) {
    print "\n Verwendung: readcount2table.pl /Pfad/zur/Ausgabe/dateiname.table /Pfad/zur/Eingabe.txt /Pfad/zur/Snps_RefuAlt.table\n";
     exit;
 }
-open(Fout,">$ARGV[0]") or die "\n\n\"Offnen von $ARGV[0] nicht m\"oglich\n\n\n";
-open(Fin,"<$ARGV[1]") or die "\n\n\"Offnen von $ARGV[1] nicht m\"oglich\n\n\n";
-open(Fin2,"<$ARGV[2]") or die "\n\n\"Offnen von $ARGV[2] nicht m\"oglich\n\n\n";
+open(Fout,">$ARGV[0]") or die "\n\n\Öffnen von $ARGV[0] nicht möglich\n\n\n";
+open(Fin,"<$ARGV[1]") or die "\n\n\Öffnen von $ARGV[1] nicht möglich\n\n\n";
+open(Fin2,"<$ARGV[2]") or die "\n\n\Öffnen von $ARGV[2] nicht möglich\n\n\n";
 
 @ref=<Fin2>;#Zeilen der RefuAlt Tabelle in einem Array Speichern
-print Fout "POS\tREF\tALT\tDP\t#A\tQual(A)\tFreq(A)\t#C\tQual(C)\tFreq(C)\t#G\tQual(G)\tFreq(G)\t#T\tQual(T)\tFreq(T)\tFreq(ALT)\tQual(ALT)\tp-value\tAntibiotic\n";
+print Fout "POS\tREF\tALT\tDP\t#A\tQual(A)\tFreq(A)\t#C\tQual(C)\tFreq(C)\t#G\tQual(G)\tFreq(G)\t#T\tQual(T)\tFreq(T)\tFreq(ALT)\tQual(ALT)\tp-Wert\tAntibiotikum\n";
 
 while($line=<Fin>){
 @array=split("\t", $line); #Jede Zeile des bam-readcount Datei nach Tabs auftrennen
@@ -26,7 +26,7 @@ while($line=<Fin>){
 @index= grep(/^$array[1]/i,@ref); #Position der bam-eadcount-Datei mit der Position der RefuAlt-Tabelle matchen
 
 
-$anzahl=@index; #Pr\"ufvariable, ob es mehrere alternative Basen und somit Doppeleintr\"age in der Resiliste gibt
+$anzahl=@index; #Prüfvariable, ob es mehrere alternative Basen und somit Doppeleinträge in der Resiliste gibt
 
 $freqA=$As[1]/$array[3];#Frequenz der Basen bestimmen
 $freqC=$Cs[1]/$array[3];
@@ -35,7 +35,7 @@ $freqT=$Ts[1]/$array[3];
 
 my $R = Statistics::R->new();
 $R->startR ;
-#nun wird die Pr\"ufvariable abgefragt und je nach Anzahl der Eintr\"age in der Resiliste gibt es 1, 2 oder 3 Eintr\"age in der Tabelle
+#nun wird die Prüfvariable abgefragt und je nach Anzahl der Einträge in der Resiliste gibt es 1, 2 oder 3 Einträge in der Tabelle
 if ($anzahl == 1) {@zeile=split("\t", $index[0]);
 		  chomp($zeile[3]);
 		  if ($zeile[2] eq "A"){$freqALT=$freqA;

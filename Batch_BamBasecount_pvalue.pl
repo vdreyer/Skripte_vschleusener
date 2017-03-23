@@ -15,26 +15,26 @@ if ($num_args != 2) {
 #Pos\tREF\tALT\Antibiotic
 
 }
-#Referenzdatei benennen
+#Referenzdatei benennen; Pfad muss angepasst werden
 $h37='/auto/Thecus_Analysis/SeqWork/DATA/M._tuberculosis_H37Rv_2013-02-15';
-#Schleife über alle BAM-Dateien eines Ordners
+#Schleife über alle BAM-Dateien des Ordners
 while($file1=<*.bam>){
 $file1=~/^(.+).bam/ or die "Format unkorrekt: $file1\n";
 $bamfile=$1;
 print "\n$file1\n$bamfile\n\n";
 
-while ($dir=<bamcount_pvalue/${bamfile}*.table>){
+while ($dir=<bamcount_pvalue/${bamfile}*.table>){  #Abfrage, ob die Datei bereits berechnet wurde
   print "$dir\n";
   $h{$1}=1;
   }
-  unless(defined $h{$1}){
+  unless(defined $h{$1}){  #wenn nicht, geht es los
 
-#bam-readcount aufrufen
+#bam-readcount aufrufen; Pfad zum Algorithmus muss angepasst werden
 $do="/home/vschleusener/Downloads/bam-readcount-master/bin/bam-readcount $file1 -b 15 -f $h37.fasta -l $ARGV[0] > bamcount_pvalue/$bamfile.txt ";
 print "\n\n\n".$do."\n\n";
 system($do); if ($?){die "$do did not work: $?\n";}
 
-#bam-readcount Ergebnisse in Tabelle konvertieren
+#bam-readcount Ergebnisse in Tabelle konvertieren , Pfad muss angepasst werden
 $do="perl /home/vschleusener/Skripte/readcount2table_binomial.pl bamcount_pvalue/$bamfile.table bamcount_pvalue/$bamfile.txt $ARGV[1]";
 print "\n\n\n".$do."\n\n";
 system($do); if ($?){die "$do did not work: $?\n";}
